@@ -12,6 +12,7 @@ using CPW215JoesWebsiteSpeakingBits.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using CPW215JoesWebsiteSpeakingBits.Models;
 
 namespace CPW215JoesWebsiteSpeakingBits
 {
@@ -30,11 +31,12 @@ namespace CPW215JoesWebsiteSpeakingBits
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(IdentityHelper.SetIdentityOptions)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
