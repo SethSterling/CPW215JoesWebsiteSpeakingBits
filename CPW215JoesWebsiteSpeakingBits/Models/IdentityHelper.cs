@@ -20,6 +20,10 @@ namespace CPW215JoesWebsiteSpeakingBits.Models
             options.Password.RequireUppercase = false;
             options.Password.RequiredLength = 8;
             options.Password.RequireNonAlphanumeric = false;
+
+            // Set lockout options
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            options.Lockout.MaxFailedAccessAttempts = 5;
         }
     }
 }
