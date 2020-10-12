@@ -32,6 +32,7 @@ namespace CPW215JoesWebsiteSpeakingBits
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(IdentityHelper.SetIdentityOptions)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -67,6 +68,13 @@ namespace CPW215JoesWebsiteSpeakingBits
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            // Create Roles
+            IServiceScope serviceProvider = app.ApplicationServices
+                                     .GetRequiredService<IServiceProvider>()
+                                     .CreateScope();
+
+            IdentityHelper.CreateRoles(serviceProvider.ServiceProvider, IdentityHelper.Instructor, IdentityHelper.Student).Wait();
         }
     }
 }
