@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using CPW215JoesWebsiteSpeakingBits.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ namespace CPW215JoesWebsiteSpeakingBits.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string StudentEmail = "@student.cptc.edu";
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
@@ -78,6 +80,16 @@ namespace CPW215JoesWebsiteSpeakingBits.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (user.Email.ToLower().EndsWith(StudentEmail))
+                    {
+                        var roleResults = await _userManager.AddToRoleAsync(user, IdentityHelper.Student);
+                        if (!roleResults.Succeeded)
+                        {
+                            _logger.LogInformation($"{user.UserName} not added to student role");
+                        }
+                    }
+
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
