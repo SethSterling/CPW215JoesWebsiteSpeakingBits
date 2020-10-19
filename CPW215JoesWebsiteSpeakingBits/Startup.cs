@@ -75,6 +75,9 @@ namespace CPW215JoesWebsiteSpeakingBits
                                      .CreateScope();
 
             IdentityHelper.CreateRoles(serviceProvider.ServiceProvider, IdentityHelper.Instructor, IdentityHelper.Student).Wait();
+
+            IdentityHelper.CreateDefaultInstructor(serviceProvider.ServiceProvider)
+                          .Wait();
         }
     }
 }

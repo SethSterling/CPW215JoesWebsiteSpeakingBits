@@ -45,5 +45,30 @@ namespace CPW215JoesWebsiteSpeakingBits.Models
                 }
             }
         }
+
+        internal static async Task CreateDefaultInstructor(IServiceProvider serviceProvider)
+        {
+            const string email = "cpw@cpw.edu";
+            const string username = "instructor";
+            const string password = "Programming";
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            // Check if any users are in database
+            if (userManager.Users.Count() == 0)
+            {
+                IdentityUser instructor = new IdentityUser
+                {
+                    Email = email,
+                    UserName = username
+                };
+
+                // Create instructor
+                await userManager.CreateAsync(instructor, password);
+
+                // Add to instructor
+                await userManager.AddToRoleAsync(instructor, Instructor);
+            }
+        }
     }
 }
